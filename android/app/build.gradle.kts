@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.tamadev.notesecret.notesecret"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34  // Fixed: Set to 34 for compatibility
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -25,8 +25,8 @@ android {
         applicationId = "com.tamadev.notesecret.notesecret"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        minSdk = flutter.minSdkVersion  // Android 5.0
+        targetSdk = 34  // Android 14
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
