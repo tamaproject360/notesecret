@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:notesecret/core/database/database_provider.dart';
 import 'package:notesecret/core/database/models/note.dart';
-import 'package:notesecret/core/database/repositories/note_repository.dart';
+import 'package:notesecret/features/notes/providers/note_provider.dart';
 
 part 'search_provider.g.dart';
 
@@ -29,5 +28,8 @@ Stream<List<Note>> searchResults(SearchResultsRef ref) async* {
   }
 
   final repository = await ref.watch(noteRepositoryProvider.future);
-  yield* repository.searchNotes(query);
+  
+  // searchNotes returns Future, so we need to await and yield
+  final results = await repository.searchNotes(query);
+  yield results;
 }

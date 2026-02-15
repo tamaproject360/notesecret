@@ -149,12 +149,18 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               return NoteCard(
                 note: note,
                 onTap: () => context.push('/note/${note.id}'),
-                highlightQuery: _searchController.text,
               );
             },
           );
         },
-        loading: () => const NotesListSkeleton(),
+        loading: () => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: CircularProgressIndicator(
+              color: isDark ? AppColors.mutedSage : AppColors.sageGreen,
+            ),
+          ),
+        ),
         error: (error, stack) => Center(
           child: Text(
             'Error: $error',
