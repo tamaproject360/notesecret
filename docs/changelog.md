@@ -25,14 +25,63 @@
 - ✅ **Auto-Lock**: App lifecycle observer for automatic vault locking on background (30s timeout)
 - ✅ **Auth Service**: Complete PIN management with flutter_secure_storage
 
-### 🔄 Phase 5: Organization & Search (In Progress)
+### 🔄 Phase 5: Organization & Search (Completed ✅)
+- ✅ **Folder System**: 
+  - Complete CRUD operations for folders
+  - Folder repository and Riverpod provider
+  - Emoji picker with 8 icon options (📁📂🗂️📚📖📝💼🎯)
+  - Create/Delete folders with confirmation
+  - Empty state with call-to-action
+  - Folders Screen UI (`folders_screen.dart`)
 - ✅ **Search Engine**: 
   - Full-text search with Isar indexing
   - Real-time search with 200ms debounce
   - Search screen with empty states
   - Search in note title and body (case-insensitive)
-- 🔄 **Folder System**: Basic folder model created, UI pending
 - ⏳ **Tagging System**: Pending
+
+### ✅ Phase 6: Data Management & Settings (80% Complete)
+- ✅ **Settings UI**: 
+  - Comprehensive settings screen with sections
+  - Security: PIN management, Biometric toggle
+  - Data: Link to Trash
+  - About: Version info, developer credits
+  - Clean Material 3 design
+- ✅ **Trash/Bin**: 
+  - Trash screen with deleted notes list
+  - Restore functionality
+  - Permanent delete with confirmation
+  - 30-day warning banner
+  - Date formatting (today, yesterday, X days ago)
+- ✅ **Export Service**: 
+  - Export to Markdown (.md)
+  - Export to Plain Text (.txt)
+  - Single note export via Share sheet
+  - Multiple notes export
+  - File name sanitization
+  - Service: `export_service.dart`
+- ✅ **Backup & Restore Service**: 
+  - AES-256 encrypted backup generation
+  - Create .notesecret backup files
+  - Password-protected encryption
+  - Restore from encrypted backup
+  - Parse notes and folders from backup
+  - Share backup via system share sheet
+  - Service: `backup_service.dart`
+- ⏳ **Notifications**: Pending
+
+### ✅ Phase 7: Onboarding & Polish (50% Complete)
+- ✅ **Onboarding Flow**: 
+  - 4-screen PageView with smooth transitions
+  - Welcome, Offline First, Lock, Start Writing screens
+  - Skip button functionality
+  - Animated dot indicators
+  - Get Started CTA
+  - Beautiful illustrations with Lucide icons
+  - `onboarding_screen.dart`
+- ✅ **Splash Screen**: Auto-navigate with branding
+- ⏳ **Motion Polish**: Pending
+- ⏳ **QA Checklist**: Pending
 
 ### 🐛 Bug Fixes
 - Fixed Gradle build errors (core library desugaring, namespace conflicts)

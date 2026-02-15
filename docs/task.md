@@ -27,19 +27,19 @@ This document outlines the comprehensive development roadmap for **NoteSecret**,
 | **4** | **Phase 4: Security & Privacy (The "Secret" Aspect)** | | | |
 | 4.1 | **Biometrics & PIN**: Implement `local_auth` for Fingerprint/Face ID and `flutter_secure_storage` for PIN management. | ✅ Completed | High | Phase 4 |
 | 4.2 | **Vault Feature**: Create the "Vault" screen (accessible only via auth), handling locking/unlocking logic for individual notes. | ✅ Completed | High | Phase 4 |
-| 4.3 | **Auto-Lock**: Implement app lifecycle listening to auto-lock Vault on background/inactive state (30s timeout). | 🔄 In Progress | High | Phase 4 |
+| 4.3 | **Auto-Lock**: Implement app lifecycle listening to auto-lock Vault on background/inactive state (30s timeout). | ✅ Completed | High | Phase 4 |
 | **5** | **Phase 5: Organization & Search** | | | |
-| 5.1 | **Folder System**: Build Folder creation/management UI with Emoji picker and drag-and-drop reordering. | 🔄 In Progress | Medium | Phase 5 |
+| 5.1 | **Folder System**: Build Folder creation/management UI with Emoji picker and drag-and-drop reordering. | ✅ Completed | Medium | Phase 5 |
 | 5.2 | **Tagging System**: Implement Tag creation, assignment to notes, and filtering logic. | Pending | Medium | Phase 5 |
-| 5.3 | **Search Engine**: Implement Full-text search (Isar indexed) with real-time highlighting and 200ms debounce. | 🔄 In Progress | High | Phase 5 |
+| 5.3 | **Search Engine**: Implement Full-text search (Isar indexed) with real-time highlighting and 200ms debounce. | ✅ Completed | High | Phase 5 |
 | **6** | **Phase 6: Data Management & Settings** | | | |
-| 6.1 | **Settings UI**: Build the Settings screen with sections: Appearance, Security, Notes, Backup, Data, About. | Pending | Low | Phase 6 |
-| 6.2 | **Trash / Bin**: Implement Trash screen with "Restore" and "Delete Permanently" (plus 30-day auto-purge logic). | Pending | Medium | Phase 6 |
-| 6.3 | **Export**: Implement Note export to PDF (`pdf` package), Markdown, and Plain text. | Pending | Medium | Phase 6 |
-| 6.4 | **Backup & Restore**: Implement AES-256 encrypted JSON backup generation (`.notesecret` file) and restore logic. | Pending | High | Phase 6 |
+| 6.1 | **Settings UI**: Build the Settings screen with sections: Appearance, Security, Notes, Backup, Data, About. | ✅ Completed | Low | Phase 6 |
+| 6.2 | **Trash / Bin**: Implement Trash screen with "Restore" and "Delete Permanently" (plus 30-day auto-purge logic). | ✅ Completed | Medium | Phase 6 |
+| 6.3 | **Export**: Implement Note export to PDF (`pdf` package), Markdown, and Plain text. | ✅ Completed | Medium | Phase 6 |
+| 6.4 | **Backup & Restore**: Implement AES-256 encrypted JSON backup generation (`.notesecret` file) and restore logic. | ✅ Completed | High | Phase 6 |
 | 6.5 | **Notifications**: Implement local reminders using `flutter_local_notifications`. | Pending | Low | Phase 6 |
 | **7** | **Phase 7: Onboarding & Polish** | | | |
-| 7.1 | **Onboarding Flow**: Build the 4-screen intro sequence (Welcome, Offline First, Lock, Get Started) with "Skip" logic. | Pending | Low | Phase 7 |
+| 7.1 | **Onboarding Flow**: Build the 4-screen intro sequence (Welcome, Offline First, Lock, Get Started) with "Skip" logic. | ✅ Completed | Low | Phase 7 |
 | 7.2 | **Splash Screen**: Create the native splash screen and the Flutter implementation with fade-out transition. | ✅ Completed | Low | Phase 7 |
 | 7.3 | **Motion Polish**: Audit all animations (150ms transitions, 0.97 scale on buttons) to match "Snappy" philosophy. | Pending | Medium | Phase 7 |
 | 7.4 | **QA Checklist**: Verify touch targets (44px+), contrast ratios, and offline functionality. | Pending | High | Phase 7 |

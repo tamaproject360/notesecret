@@ -4,6 +4,7 @@ import 'package:notesecret/features/notes/notes_list_screen.dart';
 import 'package:notesecret/features/notes/note_editor_screen.dart';
 import 'package:notesecret/features/notes/search_screen.dart';
 import 'package:notesecret/features/settings/settings_screen.dart';
+import 'package:notesecret/features/settings/trash_screen.dart';
 import 'package:notesecret/features/vault/vault_screen.dart';
 import 'package:notesecret/features/folders/folders_screen.dart';
 import 'package:notesecret/features/onboarding/onboarding_screen.dart';
@@ -38,6 +39,11 @@ final goRouter = GoRouter(
       path: '/search',
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const SearchScreen(),
+    ),
+    GoRoute(
+      path: '/trash',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const TrashScreen(),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
