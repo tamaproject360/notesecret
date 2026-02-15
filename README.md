@@ -7,7 +7,7 @@
 [![Flutter Version](https://img.shields.io/badge/Flutter-3.10.8+-02569B?logo=flutter)](https://flutter.dev)
 [![Dart Version](https://img.shields.io/badge/Dart-3.10.8+-0175C2?logo=dart)](https://dart.dev)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android)](https://www.android.com)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Windows-3DDC84?logo=android)](https://www.android.com)
 
 *Your thoughts, secured and offline. No cloud, no tracking, just pure privacy.*
 
@@ -135,6 +135,9 @@ dart run build_runner build --delete-conflicting-outputs
 # For Android device/emulator
 flutter run
 
+# For Windows desktop
+flutter run -d windows
+
 # For specific device
 flutter devices
 flutter run -d <device-id>
@@ -173,6 +176,9 @@ flutter build apk --release
 
 # Android App Bundle (for Play Store)
 flutter build appbundle --release
+
+# Windows Desktop
+flutter build windows --release
 ```
 
 ### Hot Reload & Hot Restart

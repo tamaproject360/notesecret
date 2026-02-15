@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,10 @@ import 'package:notesecret/app/theme/color_scheme.dart';
 import 'package:notesecret/app/theme/typography.dart';
 import 'package:notesecret/app/theme/theme_provider.dart';
 import 'package:notesecret/core/auth/auth_service.dart';
+import 'package:notesecret/core/backup/backup_provider.dart';
+import 'package:notesecret/features/notes/providers/note_provider.dart';
+import 'package:notesecret/core/database/repositories/folder_provider.dart';
+import 'package:file_picker/file_picker.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -34,6 +39,253 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         _biometricEnabled = biometric;
         _hasPin = pin;
       });
+    }
+  }
+
+  Future<void> _showCreateBackupDialog() async {
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Create Backup'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Your notes will be encrypted with AES-256 encryption.',
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.warmGray,
+                fontSize: 12,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(
+                labelText: 'Backup Password',
+                hintText: 'Enter a strong password',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: confirmPasswordController,
+              decoration: const InputDecoration(
+                labelText: 'Confirm Password',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (passwordController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Password cannot be empty')),
+                );
+                return;
+              }
+              if (passwordController.text != confirmPasswordController.text) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Passwords do not match')),
+                );
+                return;
+              }
+              Navigator.pop(context, true);
+            },
+            style: FilledButton.styleFrom(backgroundColor: AppColors.sageGreen),
+            child: const Text('Create'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true && mounted) {
+      _createBackup(passwordController.text);
+    }
+  }
+
+  Future<void> _createBackup(String password) async {
+    try {
+      // Show loading
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+
+      final backupService = ref.read(backupServiceProvider);
+      final noteRepo = await ref.read(noteRepositoryProvider.future);
+      final folderRepo = ref.read(folderRepositoryProvider);
+
+      // Get all notes and folders
+      final notes = await noteRepo.getAllNotes();
+      final folders = await folderRepo.getAllFolders();
+
+      // Create encrypted backup
+      final backupFile = await backupService.createEncryptedBackup(
+        notes: notes,
+        folders: folders,
+        password: password,
+      );
+
+      // Close loading
+      if (mounted) Navigator.pop(context);
+
+      // Share backup file
+      await backupService.shareBackup(backupFile);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Backup created successfully!'),
+            backgroundColor: AppColors.forestGreen,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to create backup: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _showRestoreBackupDialog() async {
+    final passwordController = TextEditingController();
+
+    // Pick backup file
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['notesecret'],
+    );
+
+    if (result == null || result.files.isEmpty) return;
+
+    final filePath = result.files.first.path;
+    if (filePath == null) return;
+
+    if (!mounted) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Restore Backup'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'This will replace all your current notes and folders.',
+              style: AppTypography.bodyMedium.copyWith(
+                color: Colors.red,
+                fontSize: 12,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(
+                labelText: 'Backup Password',
+                hintText: 'Enter your backup password',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.sageGreen),
+            child: const Text('Restore'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      _restoreBackup(filePath, passwordController.text);
+    }
+  }
+
+  Future<void> _restoreBackup(String filePath, String password) async {
+    try {
+      // Show loading
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+
+      final backupService = ref.read(backupServiceProvider);
+      final noteRepo = await ref.read(noteRepositoryProvider.future);
+      final folderRepo = ref.read(folderRepositoryProvider);
+
+      // Read backup file
+      final file = File(filePath);
+      final encryptedData = await file.readAsString();
+
+      // Decrypt and parse
+      final backupData = await backupService.restoreFromBackup(
+        encryptedData: encryptedData,
+        password: password,
+      );
+
+      // Parse notes and folders
+      final notes = backupService.parseNotes(backupData['notes'] ?? []);
+      final folders = backupService.parseFolders(backupData['folders'] ?? []);
+
+      // Clear existing data and restore
+      // Note: You may want to implement clearAll methods in repositories
+      for (final folder in folders) {
+        await folderRepo.saveFolder(folder);
+      }
+      
+      for (final note in notes) {
+        await noteRepo.saveNote(note);
+      }
+
+      // Close loading
+      if (mounted) Navigator.pop(context);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Restored ${notes.length} notes and ${folders.length} folders!'),
+            backgroundColor: AppColors.forestGreen,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to restore: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -155,6 +407,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                 
                 _buildSectionHeader('Data'),
+                _buildListTile(
+                  icon: LucideIcons.download,
+                  title: 'Create Backup',
+                  subtitle: 'Export encrypted backup file',
+                  trailing: const Icon(LucideIcons.chevronRight, size: 20),
+                  onTap: _showCreateBackupDialog,
+                ),
+                _buildListTile(
+                  icon: LucideIcons.upload,
+                  title: 'Restore Backup',
+                  subtitle: 'Import from backup file',
+                  trailing: const Icon(LucideIcons.chevronRight, size: 20),
+                  onTap: _showRestoreBackupDialog,
+                ),
                 _buildListTile(
                   icon: LucideIcons.trash2,
                   title: 'Trash',

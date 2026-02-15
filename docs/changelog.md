@@ -94,6 +94,31 @@
   - Improved performance by filtering at database level with `.filter().tags()`
   - Now properly excludes deleted/locked notes and sorts by date efficiently
 
+### 🎨 UI/UX Improvements
+- **[2026-02-15]** Redesigned note cards with full background color:
+  - Note color now fills entire card background (Google Keep style)
+  - Removed left color strip, replaced with full background
+  - Smart text contrast: automatically adjusts text color based on background brightness
+  - Added subtle border for cards without custom colors
+- **[2026-02-15]** Implemented Pinterest/Masonry layout:
+  - Replaced fixed-height grid with dynamic masonry layout
+  - Cards now auto-size based on content length (like Google Keep)
+  - More efficient space usage with staggered grid view
+  - Package: `flutter_staggered_grid_view ^0.7.0`
+
+### ✨ New Features
+- **[2026-02-15]** Added Backup & Restore to Settings:
+  - Create encrypted backups with AES-256 encryption
+  - Password-protected .notesecret backup files
+  - Restore from backup with password verification
+  - Share backup files via system share sheet
+  - Package: `file_picker ^8.0.0`
+- **[2026-02-15]** Windows Desktop Support:
+  - Enabled Windows desktop platform
+  - Full cross-platform compatibility (Android + Windows)
+  - Same features available on both platforms
+  - Responsive UI for desktop screens
+
 ### 📝 Documentation
 - Created `docs/specs.md` with comprehensive project guidelines
 - Updated `docs/task.md` with progress tracking

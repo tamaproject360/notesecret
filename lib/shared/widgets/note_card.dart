@@ -72,11 +72,20 @@ class _NoteCardState extends State<NoteCard> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardBg = isDark ? AppColors.darkWarm : AppColors.softCream;
-    final textColor = isDark ? AppColors.darkTextCream : AppColors.deepCharcoal;
-    final secondaryTextColor = isDark ? AppColors.ashGray : AppColors.warmGray;
-
+    final defaultCardBg = isDark ? AppColors.darkWarm : AppColors.softCream;
     final noteColor = _getNoteColor(widget.note.color);
+    
+    // Use note color as background, or default if no color set
+    final cardBg = noteColor ?? defaultCardBg;
+    
+    // Adjust text color based on background brightness
+    final textColor = noteColor != null 
+        ? _getContrastColor(noteColor)
+        : (isDark ? AppColors.darkTextCream : AppColors.deepCharcoal);
+    
+    final secondaryTextColor = noteColor != null
+        ? _getContrastColor(noteColor).withOpacity(0.7)
+        : (isDark ? AppColors.ashGray : AppColors.warmGray);
     
     return GestureDetector(
       onTapDown: _onTapDown,
@@ -98,76 +107,74 @@ class _NoteCardState extends State<NoteCard> with SingleTickerProviderStateMixin
           decoration: BoxDecoration(
             color: cardBg,
             borderRadius: BorderRadius.circular(16),
+            border: noteColor == null 
+                ? Border.all(
+                    color: isDark 
+                        ? AppColors.warmGray.withOpacity(0.1)
+                        : AppColors.warmGray.withOpacity(0.05),
+                    width: 1,
+                  )
+                : null,
             boxShadow: [
               BoxShadow(
                 color: isDark 
                   ? const Color.fromRGBO(0, 0, 0, 0.3) 
-                  : const Color.fromRGBO(0, 0, 0, 0.06),
+                  : const Color.fromRGBO(0, 0, 0, 0.08),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
             ],
           ),
           clipBehavior: Clip.antiAlias,
-          child: IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                if (noteColor != null)
-                  Container(
-                    width: 4,
-                    color: noteColor,
-                  ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                widget.note.title.isEmpty ? 'Untitled' : widget.note.title,
-                                style: AppTypography.headingMedium.copyWith(
-                                  fontSize: 16,
-                                  color: textColor,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (widget.note.isPinned) ...[
-                              const SizedBox(width: 8),
-                              Icon(LucideIcons.pin, size: 14, color: secondaryTextColor),
-                            ],
-                            if (widget.note.isLocked) ...[
-                              const SizedBox(width: 8),
-                              Icon(LucideIcons.lock, size: 14, color: secondaryTextColor),
-                            ],
-                          ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.note.title.isEmpty ? 'Untitled' : widget.note.title,
+                        style: AppTypography.headingMedium.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: textColor,
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          widget.note.body.isEmpty ? 'No content' : widget.note.body,
-                          style: AppTypography.bodyMedium.copyWith(
-                            fontSize: 14,
-                            color: secondaryTextColor,
-                          ),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const Spacer(),
-                        const SizedBox(height: 12),
-                        Text(
-                          DateFormat.yMMMd().format(widget.note.updatedAt),
-                          style: AppTypography.labelSmall.copyWith(
-                            fontSize: 11,
-                            color: secondaryTextColor,
-                          ),
-                        ),
-                      ],
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
+                    if (widget.note.isPinned) ...[
+                      const SizedBox(width: 8),
+                      Icon(LucideIcons.pin, size: 14, color: secondaryTextColor),
+                    ],
+                    if (widget.note.isLocked) ...[
+                      const SizedBox(width: 8),
+                      Icon(LucideIcons.lock, size: 14, color: secondaryTextColor),
+                    ],
+                  ],
+                ),
+                if (widget.note.body.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.note.body,
+                    style: AppTypography.bodyMedium.copyWith(
+                      fontSize: 14,
+                      color: secondaryTextColor,
+                      height: 1.4,
+                    ),
+                    maxLines: 8,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+                const SizedBox(height: 12),
+                Text(
+                  DateFormat.yMMMd().format(widget.note.updatedAt),
+                  style: AppTypography.labelSmall.copyWith(
+                    fontSize: 11,
+                    color: secondaryTextColor,
                   ),
                 ),
               ],
@@ -176,5 +183,16 @@ class _NoteCardState extends State<NoteCard> with SingleTickerProviderStateMixin
         ),
       ),
     );
+  }
+
+  // Helper to determine text color based on background brightness
+  Color _getContrastColor(Color background) {
+    // Calculate luminance
+    final luminance = (0.299 * background.red + 
+                      0.587 * background.green + 
+                      0.114 * background.blue) / 255;
+    
+    // Return dark text for light backgrounds, light text for dark backgrounds
+    return luminance > 0.5 ? Colors.black87 : Colors.white;
   }
 }

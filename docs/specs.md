@@ -6,7 +6,7 @@
 - **Core Utility**: Secure, offline note-taking with AES-256 encrypted backups.
 - **Target Audience**: Privacy-conscious users, journalists, and professionals.
 - **Design Philosophy**: Minimalist, "Ink on Paper" feel using Serif typography and earthy tones.
-- **Platform**: Android (Primary), adaptable to Windows Desktop.
+- **Platform**: Android (Primary), **Windows Desktop** (Supported).
 
 ## Tech Stack
 The project is built using **Flutter 3.x** and **Dart**, focusing on performance, offline capability, and security.

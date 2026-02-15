@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:notesecret/app/theme/color_scheme.dart';
@@ -83,19 +84,14 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
               return SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 sliver: _isGridView 
-                  ? SliverGrid(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => NoteCard(
-                          note: notes[index],
-                          onTap: () => context.push('/note/${notes[index].id}'),
-                        ),
-                        childCount: notes.length,
-                      ),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        childAspectRatio: 0.8,
+                  ? SliverMasonryGrid.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childCount: notes.length,
+                      itemBuilder: (context, index) => NoteCard(
+                        note: notes[index],
+                        onTap: () => context.push('/note/${notes[index].id}'),
                       ),
                     )
                   : SliverList(
@@ -114,17 +110,12 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
             },
             loading: () => SliverPadding(
               padding: const EdgeInsets.all(16),
-              sliver: SliverGrid(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => const SkeletonCard(height: 150),
-                  childCount: 4,
-                ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 0.8,
-                ),
+              sliver: SliverMasonryGrid.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childCount: 4,
+                itemBuilder: (context, index) => const SkeletonCard(height: 150),
               ),
             ),
             error: (e, _) => SliverToBoxAdapter(child: Text('Error: $e')),
@@ -257,16 +248,13 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
 
   Widget _buildNoteGridOrList(List notes) {
     if (_isGridView) {
-      return GridView.builder(
+      return MasonryGridView.count(
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 0.8,
-        ),
+        crossAxisCount: 2,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
         itemCount: notes.length,
         itemBuilder: (context, index) => NoteCard(
           note: notes[index],

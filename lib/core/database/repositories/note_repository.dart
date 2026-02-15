@@ -124,4 +124,19 @@ class NoteRepository {
       }
     });
   }
+
+  Future<List<Note>> getAllNotes({bool includeDeleted = false}) async {
+    if (includeDeleted) {
+      return await _isar.notes
+          .where()
+          .sortByUpdatedAtDesc()
+          .findAll();
+    } else {
+      return await _isar.notes
+          .filter()
+          .deletedAtIsNull()
+          .sortByUpdatedAtDesc()
+          .findAll();
+    }
+  }
 }
