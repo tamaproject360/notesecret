@@ -1,0 +1,434 @@
+You are building an Apple Design Award winning mobile app and Google Play Best of mobile app for 2035. This is a premium Productivity & Privacy app. Every pixel matters. Optimized for touch. No desktop-first logic. No generic inputs. The primary platform is Android (Flutter), with future expansion to Desktop Windows using the same codebase.
+
+<app_identity>
+Name: NoteSecret
+Tagline: "Your Notes. Your Privacy."
+Core Utility: A privacy-first, offline-only note-taking app that replaces Google Keep. All data lives on-device with zero cloud dependency. Features manual encrypted backup/restore for device migration. Individual notes can be locked with PIN or biometric authentication.
+Target User: Privacy-conscious individuals, young professionals, journalists, writers, students, and anyone who values fast, lightweight, and secure note-taking without relying on cloud services or user accounts.
+Vibe: Like writing in a leather-bound journal in a quiet garden — clean, calm, minimal, organic, and deeply personal. No visual noise. Every screen feels like a blank page inviting you to write.
+</app_identity>
+
+<design_philosophy>
+NoteSecret follows a "Calm Technology" philosophy — the app serves the user without demanding attention. The UX is built on three pillars:
+
+1. **Zero Friction**: No login, no onboarding walls, no mandatory permissions. Open the app → start writing. The fastest path from thought to note.
+
+2. **Thumb-Zone Architecture**: All primary actions (create note, search, navigate) are placed within the natural thumb reach zone (bottom 60% of screen). Navigation bar is anchored at the bottom. The FAB (Floating Action Button) for "New Note" sits at the bottom-right corner — the most accessible touch point for right-handed users (with left-hand mode option in settings).
+
+3. **Content-First Hierarchy**: UI chrome is minimal. The note content is the hero. Toolbars, labels, and metadata fade into the background. When the user is writing, the editor goes into a distraction-free mode with only essential formatting controls visible.
+
+Typography uses serif fonts (Lora & Merriweather) to evoke the feeling of printed books and handwritten journals — a deliberate contrast to the sans-serif dominated app landscape. This gives NoteSecret a distinctive, timeless identity.
+
+Whitespace is treated as a design element, not wasted space. Generous padding, breathing room between cards, and soft earthy tones create a sense of calm and order.
+</design_philosophy>
+
+<color_system>
+Forget web palettes. This is a mobile UI system designed for OLED screens and outdoor readability:
+
+Light Mode:
+- Parchment White: #FAF8F5 (Primary background — warm off-white, soft on eyes, like aged paper)
+- Deep Charcoal: #2C2C2C (Primary text — high contrast but not harsh pure black)
+- Sage Green: #6B7F5E (Primary accent — used ONLY for main CTA/FAB and active states)
+- Warm Gray: #B8B0A8 (Secondary text, placeholders, dividers)
+- Soft Cream: #F0EBE3 (Card backgrounds, input fields, elevated surfaces)
+- Terracotta: #C17B5D (Warning/destructive actions — delete, lock alerts)
+- Forest Green: #4A6741 (Success states — saved, exported, restored)
+- Lavender Mist: #E8E0F0 (Note color option)
+- Soft Peach: #F5DDD0 (Note color option)
+- Pale Sage: #DDE8D6 (Note color option)
+- Warm Sand: #EDE4D3 (Note color option)
+- Sky Whisper: #D6E5ED (Note color option)
+
+Dark Mode:
+- Warm Black: #1A1A1A (Primary background — true OLED black with warmth)
+- Soft Cream: #E8E4DF (Primary text — warm white, easy on eyes at night)
+- Muted Sage: #8FA87A (Primary accent — slightly brighter for dark mode visibility)
+- Ash Gray: #6B6560 (Secondary text, placeholders, dividers)
+- Dark Warm: #252220 (Card backgrounds, elevated surfaces)
+- Soft Terracotta: #D4916E (Warning/destructive in dark mode)
+- Light Forest: #7BAF6E (Success states in dark mode)
+- Muted Lavender: #3D3545 (Note color option — dark)
+- Muted Peach: #3E302A (Note color option — dark)
+- Muted Sage Card: #2E3529 (Note color option — dark)
+- Muted Sand: #35302A (Note color option — dark)
+- Muted Sky: #2A3238 (Note color option — dark)
+
+Rule: High contrast for WCAG AA accessibility compliance. Primary accent color (Sage Green) is used ONLY for the main FAB and primary CTA buttons. All other interactive elements use subtle tonal variations. Color-coded notes use the earthy palette above — no neon, no primary colors.
+</color_system>
+
+<typography>
+Optimized for small screens and long reading sessions:
+
+- Headings (Note titles, Section headers): Lora Bold, 22px-28px, tracking -0.02em, tight leading (1.2). Gives a literary, book-title feel.
+- Body (Note content, descriptions): Merriweather Regular, 16px minimum for readability, line-height 1.6 for comfortable reading. Merriweather Light for longer passages.
+- UI Labels (Tab bar, timestamps, tags, buttons): Inter Medium/SemiBold, 12px-14px. Sans-serif for maximum clarity at small sizes. Tracking +0.02em for legibility.
+- Editor Toolbar Icons Labels: Inter Regular, 11px, uppercase for categories.
+- Monospace (Markdown preview/code blocks): JetBrains Mono, 14px.
+
+Font loading: Bundle Lora, Merriweather, and Inter via google_fonts package. Cache locally for offline access. Fallback: System serif → System sans-serif.
+
+Scale: Use Flutter's TextTheme with named styles (displayLarge, titleMedium, bodyLarge, labelSmall) mapped to the above specifications.
+</typography>
+
+<gestures_and_haptics>
+The app is snappy, instant, and silent — like a precision tool:
+
+- Tap: Immediate response. Button scales down to 0.97 with 100ms opacity fade (0.7 → 1.0). No haptic vibration.
+- Long Press: Activates multi-select mode on notes list, or shows context menu (pin, lock, color, delete).
+- Swipe Right: Quick action — Pin/Unpin note (on notes list).
+- Swipe Left: Quick action — Delete note (with undo snackbar).
+- Pull to Refresh: Not needed (offline-first, no sync). Disabled to avoid confusion.
+- Scroll: Standard Flutter scroll physics. Fast deceleration. No bounce on Android (ClampingScrollPhysics).
+- Back Navigation: System back gesture or top-left back arrow. Predictive back gesture support on Android 14+.
+- Transitions: Instant push/pop with minimal 150ms fade. No spring physics, no parallax, no page curl. Sheets and modals slide from bottom with 200ms duration.
+- Haptics: NONE. Zero vibration. The app is completely silent. Visual feedback only.
+- Keyboard: Editor auto-focuses with soft keyboard. Formatting toolbar sits above keyboard (InputAccessoryView pattern).
+</gestures_and_haptics>
+
+<onboarding_flow>
+The first 60 seconds — brief, beautiful, then get out of the way:
+
+Screen 1 (Welcome):
+- Visual: Minimal illustration of an open journal with a leaf floating above it. Soft earthy gradient background.
+- Headline (Lora Bold): "Your Notes. Your Privacy."
+- Subtitle (Merriweather): "A calm space for your thoughts. No account needed. No cloud. Just you and your words."
+- Bottom CTA: "Next →" button in Sage Green.
+
+Screen 2 (Offline First):
+- Visual: Icon of a phone with a shield/lock symbol. No Wi-Fi icon crossed out subtly.
+- Headline: "Offline by Design"
+- Subtitle: "Every note lives on your device. No servers. No tracking. Back up anytime with encrypted export."
+
+Screen 3 (Lock Your Secrets):
+- Visual: A single note card with a small lock icon animating closed.
+- Headline: "Lock What Matters"
+- Subtitle: "Protect sensitive notes with PIN or fingerprint. Only you can access them."
+
+Screen 4 (Get Started):
+- Visual: Clean empty state illustration — a blank page with a gentle pencil icon.
+- Headline: "Start Writing"
+- CTA: Large full-width button at bottom: "Create Your First Note" in Sage Green. Dominates the bottom 20% of screen.
+
+Interaction: Horizontal swipe or tap to advance. Dot indicators at bottom. "Skip" text button at top-right. Onboarding only shows on first launch — never again.
+</onboarding_flow>
+
+<splash_screen>
+- Duration: 1.5 seconds, then fade to Home or Onboarding (first launch).
+- Background: Parchment White (light) or Warm Black (dark), matching system theme.
+- Center: NoteSecret logo/icon — a minimal journal icon with a subtle leaf or lock motif.
+- Below logo: App name "NoteSecret" in Lora Bold, 28px.
+- Bottom: "Built with passion by tamadev © 2025" in Inter Regular, 12px, Warm Gray color.
+- Transition: Gentle 300ms fade-out into the next screen.
+</splash_screen>
+
+<home_dashboard>
+The command center — clean and scannable:
+
+Layout: 
+- Default: Card grid (2 columns) showing note preview cards. Toggle to list view via icon button in header.
+- Cards show: Title (Lora Bold, 16px, max 2 lines), body preview (Merriweather, 14px, max 3 lines), color strip on left edge (if color-coded), lock icon (if locked), pin icon (if pinned), timestamp at bottom (Inter, 11px, gray).
+- Pinned notes section at top with subtle "Pinned" label divider.
+
+Header:
+- Top-left: "NoteSecret" wordmark in Lora Bold, 20px.
+- Top-right: Search icon (tap to expand full search bar) + Grid/List toggle icon.
+
+Search Bar (expanded):
+- Full-width with rounded corners (24px radius), Soft Cream background.
+- Placeholder: "Search your notes..." in Warm Gray.
+- Instant full-text search results as user types. Highlights matched text.
+
+FAB (Floating Action Button):
+- Bottom-right, 56x56px, Sage Green background, white "+" icon.
+- Tap → opens new blank note in editor immediately.
+- Subtle shadow elevation. No animation on appearance.
+
+Empty State:
+- Center illustration: Open journal with pencil.
+- Text: "No notes yet. Tap + to start writing." (Merriweather, 16px, gray)
+
+Navigation: Bottom Tab Bar (see navigation_bar section).
+</home_dashboard>
+
+<navigation_structure>
+<pattern>Bottom Tab Bar — Fixed, always visible except in full-screen editor mode</pattern>
+<items>
+1. Home (Notes list — default landing screen)
+2. Vault (Locked notes collection — requires biometric/PIN to enter)
+3. Folders (Tags, Labels, and Folder organization)
+4. Settings (App preferences, backup/restore, about)
+</items>
+</navigation_structure>
+
+<feature_screens>
+Core functionality — detailed screen-by-screen:
+
+1. **Note Editor**:
+   - Full-screen distraction-free writing environment.
+   - Top bar: Back arrow (left), Note title input (center, Lora Bold placeholder "Untitled"), overflow menu ⋮ (right: lock, color, export, delete).
+   - Body: Large text area, Merriweather 16px, generous line-height (1.6). Placeholder: "Start writing..."
+   - Formatting toolbar above keyboard: Bold, Italic, Underline, Heading (H1/H2/H3), Checklist, Bullet list, Quote block, Markdown toggle.
+   - Attachments: Tap paperclip icon → attach image from gallery/camera or file. Images display inline with note content.
+   - Auto-save: Every 2 seconds of inactivity, note saves locally. No manual save button needed. Subtle "Saved ✓" indicator in top bar.
+   - Markdown mode: Toggle to write/preview Markdown. Syntax highlighting in JetBrains Mono.
+   - Word/character count at bottom in Inter 11px, gray.
+
+2. **Vault (Locked Notes)**:
+   - Entry requires biometric (fingerprint/face) or PIN authentication.
+   - Once unlocked, displays all locked notes in a list.
+   - UI identical to Home but with a subtle shield/lock icon in header.
+   - Lock button on each note to unlock/remove from vault.
+   - Auto-locks when app goes to background or after 30 seconds of inactivity (configurable in settings).
+
+3. **Folders & Tags Manager**:
+   - Left section: Folder list (user-created folders). Tap to view notes inside.
+   - Tags displayed as horizontal scrollable chips at top.
+   - Create new folder: "+" button. Name input with emoji picker for folder icon.
+   - Create new tag: "+" chip at end of tag row.
+   - Drag-and-drop to reorder folders.
+   - Each folder shows note count badge.
+
+4. **Full-Text Search**:
+   - Activated from Home header search icon.
+   - Full-screen search overlay with auto-focus keyboard.
+   - Results update in real-time as user types (debounced 200ms).
+   - Results show note title + highlighted matching text snippet.
+   - Search indexes: note title, body text, tags, folder names.
+   - Recent searches shown when search bar is empty.
+
+5. **Color-Coded Notes**:
+   - In note editor overflow menu or long-press context menu on Home.
+   - Color picker: 6 earthy color options (Lavender, Peach, Sage, Sand, Sky, None/Default) displayed as circles.
+   - Selected color applies as a subtle background tint to the note card on Home.
+
+6. **Trash**:
+   - Accessible from Settings → Trash.
+   - Shows all soft-deleted notes with deletion date.
+   - "Restore" and "Delete Permanently" actions per note.
+   - Auto-purge after 30 days. Warning banner: "Notes are permanently deleted after 30 days."
+   - "Empty Trash" button with confirmation dialog.
+
+7. **Export**:
+   - Per-note export from editor overflow menu.
+   - Formats: PDF (styled with app typography), Markdown (.md), Plain Text (.txt).
+   - Uses system share sheet for sending/saving.
+   - Batch export: Select multiple notes from Home (long-press to multi-select) → Export all.
+
+8. **Backup & Restore**:
+   - Located in Settings → Backup & Restore.
+   - **Create Backup**: Generates encrypted `.notesecret` file (AES-256 encryption). User sets a backup password. File saved via system file picker or share sheet (can send to Google Drive, email, etc.).
+   - **Restore Backup**: Import `.notesecret` file → enter backup password → preview note count → confirm restore. Options: "Merge with existing" or "Replace all".
+   - Backup includes: All notes, folders, tags, color codes, lock states (but NOT biometric data — user must re-setup PIN/biometric on new device).
+   - Last backup date shown in settings.
+
+9. **Settings Page**:
+   - Grouped sections with clean list UI:
+     - **Appearance**: Theme toggle (Light / Dark / System Auto), Font size slider (Small / Medium / Large).
+     - **Security**: Setup/Change PIN, Enable/Disable Biometric, Auto-lock timeout (Immediately / 30s / 1min / 5min).
+     - **Notes**: Default note color, Enable Markdown by default, Sort order (Date modified / Date created / Alphabetical).
+     - **Backup & Restore**: Create Backup, Restore Backup, Last backup info.
+     - **Data**: Trash, Export all notes, Clear all data (with strong confirmation).
+     - **About**: App version, "Built with passion by tamadev © 2025", Licenses, Rate app, Feedback.
+
+10. **Reminder / Notification**:
+    - Per-note reminder from editor overflow menu → "Set Reminder".
+    - Date & time picker (Material 3 style).
+    - Local notification (no server needed) via flutter_local_notifications.
+    - Reminder badge on note card in Home view.
+    - Reminder list accessible from Settings → Reminders.
+
+Detail: ALL clickable/tappable elements are minimum 44x44px touch target. No exceptions.
+</feature_screens>
+
+<components_library>
+Reusable atoms for consistent UI:
+
+- **Note Cards**: Border radius 16px, elevation shadow (0px 2px 8px rgba(0,0,0,0.06) for light, 0px 2px 8px rgba(0,0,0,0.3) for dark), padding 16px, background Soft Cream (light) / Dark Warm (dark). Color strip: 4px left border in note color.
+
+- **Input Fields**: Filled box style with rounded corners (12px radius). Background: Soft Cream / Dark Warm. Floating label animation. No outline border — clean and minimal.
+
+- **Buttons**: 
+  - Primary (FAB/CTA): Sage Green bg, white text, 12px radius, 48px height, Inter SemiBold 16px.
+  - Secondary: Transparent bg, Sage Green text/border, 12px radius.
+  - Destructive: Terracotta bg for delete confirmations.
+  - All buttons: Scale down to 0.97 on press with 100ms duration.
+
+- **Lists**: Subtle 0.5px dividers in Warm Gray (10% opacity). No heavy lines. Thumbnail on left (40x40px, 8px radius), chevron icon on right (Lucide). 56px minimum row height.
+
+- **Modals / Bottom Sheets**: Slide from bottom, 24px top border radius, drag handle (40x4px, centered, gray). Scrim overlay at 40% black opacity. Max height: 70% of screen.
+
+- **Chips / Tags**: Rounded pill shape (20px radius), 32px height, Inter Medium 13px. Outline style with 1px border. Selected state: filled with accent color.
+
+- **Toast / Snackbar**: Slides from bottom, 12px radius, dark semi-transparent background, white text. Auto-dismiss after 3 seconds. "Undo" action for destructive operations.
+
+- **Skeleton Loader**: Shimmer effect on card shapes during any async operation (backup loading, search indexing). Never use spinners.
+</components_library>
+
+<navigation_bar>
+The anchor — always within thumb reach:
+
+- Style: Fixed Bottom Tab Bar, slightly elevated (4px shadow), full-width.
+- Background: Parchment White / Warm Black with subtle top border (0.5px Warm Gray).
+- Icons: Lucide outline icons (24x24px). 4 tabs: Home (notebook icon), Vault (lock icon), Folders (folder icon), Settings (gear icon).
+- Active State: Icon fills solid + Sage Green tint. Small dot indicator (4px circle) below active icon. Label text turns Sage Green.
+- Inactive State: Warm Gray outline icons. Label text in Warm Gray.
+- Labels: Always visible below icons. Inter Medium, 11px.
+- Touch target: Each tab is minimum 48x48px.
+- Safe area: Respects bottom safe area / home indicator on modern devices.
+- Behavior: Hides when keyboard is open. Hides in full-screen note editor (reappears on back navigation).
+</navigation_bar>
+
+<global_interactions>
+Everything responds to touch with visual-only feedback:
+
+- **Loading**: Skeleton shimmer screens matching content layout. Subtle gray gradient animation left-to-right. Never use circular spinners or progress bars.
+- **Errors**: Toast notification sliding from bottom. Soft Terracotta background with white text. Icon: ⚠️. Auto-dismiss 4 seconds.
+- **Success**: Toast with Forest Green background. Subtle checkmark icon animation (scale from 0 → 1 with 200ms). "Note saved", "Backup created", "Note exported".
+- **Destructive Confirmation**: Bottom sheet modal with clear warning text, Terracotta "Delete" button, and gray "Cancel" button. Never delete without confirmation.
+- **Undo**: Snackbar with "Undo" action button for: delete note, remove tag, unpin. Persists for 5 seconds.
+- **Empty States**: Friendly illustration + helpful text + CTA button for each empty screen (no notes, no folders, no search results, empty trash).
+- **Pull-down Dismiss**: Bottom sheets and modals can be dismissed by dragging down.
+</global_interactions>
+
+<motion_principles>
+Mobile-first, snappy physics — no unnecessary motion:
+
+1. Response time < 80ms for all tap interactions.
+2. Screen transitions: 150ms fade/slide. No spring physics. No overshoot.
+3. Modal/Sheet entrance: 200ms slide-up with ease-out curve.
+4. List items: No staggered entrance — all items appear instantly (snappy philosophy).
+5. Button press: Scale 0.97 + opacity 0.7, duration 100ms.
+6. Skeleton shimmer: Continuous 1.5s loop, subtle gradient.
+7. Auto-save indicator: Fade-in 200ms, persist 1s, fade-out 200ms.
+
+Forbidden:
+- NO hover effects (mobile has no cursor)
+- NO tiny clickable text links (minimum 44x44px touch targets)
+- NO horizontal scroll inside vertical scroll without snap physics
+- NO spring/bounce animations (conflicts with snappy philosophy)
+- NO splash/ripple effects longer than 150ms
+- NO parallax scrolling
+- NO auto-playing videos or animated backgrounds
+</motion_principles>
+
+<technical_architecture>
+Stack:
+- Framework: Flutter 3.x (Dart)
+- Target: Android first → Desktop Windows (adaptive layout)
+- Styling: Custom ThemeData with Material 3 foundation, fully customized color scheme and typography
+- Animation: Flutter built-in ImplicitlyAnimatedWidget family (AnimatedContainer, AnimatedOpacity, AnimatedScale). No external animation libraries needed for snappy approach.
+- Icons: Lucide Icons (lucide_icons package) — clean, consistent, outline style
+- State Management: Riverpod (flutter_riverpod) — reactive, testable, scalable
+- Local Database: Isar Database (isar package) — NoSQL, offline-first, blazing fast, full-text search built-in
+- Encryption: AES-256 via encrypt package for backup files. flutter_secure_storage for PIN storage
+- Biometric: local_auth package for fingerprint/face authentication
+- Notifications: flutter_local_notifications for reminders (no server/FCM needed)
+- File Export: pdf package for PDF generation, share_plus for system share sheet
+- Markdown: flutter_markdown for rendering, markdown parser for syntax
+- Image Handling: image_picker for attachments, cached locally in app directory
+
+Performance Requirements:
+- App cold start < 2 seconds
+- Note list render < 100ms for 1000+ notes (Isar pagination)
+- Search results < 200ms (Isar full-text index)
+- No layout shift on load — skeleton screens match final layout
+- No jank — 60fps minimum on mid-range Android devices
+- Image optimization: Compress attachments to WebP, max 1080px width
+- Memory: Lazy loading for note list, dispose controllers properly
+- APK size target: < 15MB
+
+Responsive / Adaptive Layout:
+- Mobile Portrait (360-428dp): Primary single-column view. Full-width cards.
+- Mobile Landscape (640-920dp): Two-column note grid maintained.
+- Tablet (920dp+): Master-Detail split view — note list on left (40%), editor on right (60%).
+- Desktop Windows: Master-Detail with sidebar navigation (Folders/Vault as sidebar, not bottom tab). Keyboard shortcuts support (Ctrl+N new note, Ctrl+S save, Ctrl+F search, Ctrl+B bold, etc.).
+
+Folder Structure (Flutter):
+lib/
+├── main.dart
+├── app/
+│   ├── app.dart
+│   ├── router.dart
+│   └── theme/
+│       ├── app_theme.dart
+│       ├── color_scheme.dart
+│       └── typography.dart
+├── features/
+│   ├── notes/ (list, editor, search)
+│   ├── vault/
+│   ├── folders/
+│   ├── settings/
+│   ├── backup/
+│   ├── onboarding/
+│   └── splash/
+├── core/
+│   ├── database/ (Isar models, repository)
+│   ├── encryption/
+│   ├── auth/ (biometric, PIN)
+│   └── notifications/
+├── shared/
+│   ├── widgets/ (cards, buttons, inputs, modals)
+│   └── utils/
+</technical_architecture>
+
+<data_strategy>
+<storage>
+Full Local — Isar NoSQL Database.
+All data stored on-device in app's private directory.
+No cloud sync. No remote server. No analytics. No telemetry.
+Database schema:
+- Notes: id, title, body (rich text/markdown), color, isPinned, isLocked, folderId, tags[], attachments[], createdAt, updatedAt, deletedAt (soft delete).
+- Folders: id, name, emoji, sortOrder, createdAt.
+- Tags: id, name, color, createdAt.
+- Settings: key-value pairs stored in SharedPreferences.
+- Backup format: JSON export of all tables → AES-256 encrypted → .notesecret file extension.
+</storage>
+
+<auth_security>
+- No user account / login. Zero authentication barrier.
+- App-level: Optional PIN (4-6 digits) stored in flutter_secure_storage (Keystore on Android).
+- Biometric: Optional fingerprint/face via local_auth. Used for Vault access and locked notes.
+- Per-note lock: Individual notes can be flagged as locked. Requires biometric/PIN to view content.
+- Backup encryption: AES-256-CBC with user-defined password. Password is NOT stored — user must remember it.
+- Auto-lock: Vault auto-locks when app moves to background. Configurable timeout.
+- No data leaves the device unless user explicitly exports or creates a backup.
+</auth_security>
+</data_strategy>
+
+<credits_and_branding>
+<developer_signature>Built with passion by tamadev © 2025</developer_signature>
+<copyright_year>2025</copyright_year>
+<placement>
+- Splash Screen: Bottom center, Inter Regular 12px, Warm Gray.
+- Settings → About Page: Centered, with app icon, version number, and signature.
+- Export PDF footer: Small "Created with NoteSecret" watermark (optional, can be disabled in settings).
+</placement>
+</credits_and_branding>
+
+<quality_checklist>
+Before this is complete, verify:
+□ Are ALL touch targets > 44px? (Buttons, list items, icons, tabs)
+□ Is text readable outdoors? (High contrast ratio, WCAG AA minimum)
+□ Is navigation reachable with one thumb? (Bottom tab bar, FAB in thumb zone)
+□ Do buttons provide immediate visual feedback on press? (Scale 0.97 + opacity)
+□ Are 'Back' gestures intuitive? (System back + top-left arrow)
+□ Is the bottom safe area (Home indicator / navigation bar) respected?
+□ No 'Hover' logic anywhere in the codebase?
+□ Dark mode fully supported with proper earthy dark palette?
+□ Light mode fully supported with warm parchment palette?
+□ Auto theme switching works based on system preference?
+□ Offline-first: App works with zero internet connection?
+□ All notes persist after app restart? (Isar database)
+□ Backup file is properly AES-256 encrypted?
+□ Restore successfully rebuilds all data from backup?
+□ Locked notes are truly inaccessible without PIN/biometric?
+□ Skeleton loading screens used instead of spinners?
+□ Empty states are friendly and have clear CTAs?
+□ Serif typography (Lora/Merriweather) renders beautifully on all screen sizes?
+□ Note editor is distraction-free with keyboard-aware formatting toolbar?
+□ Search is instant with full-text indexing?
+□ Would this get featured on the Google Play Store?
+□ Does it feel like a native app, not a web wrapper?
+</quality_checklist>
+
+Build this. Make it feel like a native app, not a website. Every interaction should feel immediate, calm, and intentional — like writing in a beautiful journal that respects your privacy absolutely.
