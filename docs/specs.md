@@ -82,6 +82,45 @@ flutter analyze
 flutter test
 ```
 
+### Building for Production
+
+#### Android
+```bash
+# Build APK (debug)
+flutter build apk
+
+# Build APK (release)
+flutter build apk --release
+
+# Build App Bundle (for Play Store)
+flutter build appbundle --release
+```
+
+#### Windows
+```bash
+# Build Windows executable (release)
+flutter build windows --release
+
+# Output location: build\windows\x64\runner\Release\notesecret.exe
+```
+
+**Prerequisites for Windows Build:**
+- Visual Studio 2019 or later (or Visual Studio Build Tools)
+- Required components:
+  - Desktop development with C++
+  - C++ ATL for latest build tools (x86 & x64)
+  - C++ MFC for latest build tools (x86 & x64)
+  - Windows 10 SDK
+
+### Asset Management
+```bash
+# Generate launcher icons
+flutter pub run flutter_launcher_icons
+
+# Generate native splash screens
+flutter pub run flutter_native_splash:create
+```
+
 ## Code Style
 
 ### Dart
