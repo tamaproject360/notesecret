@@ -88,6 +88,11 @@
 - Fixed CardTheme/CardThemeData type compatibility
 - Fixed splash screen navigation (auto-navigate to home after 1.5s)
 - Updated flutter_local_notifications to v17.2.4 (resolved compilation errors)
+- **[2026-02-15]** Fixed `tag_filter_provider.dart` compilation error:
+  - Added missing `import 'package:isar/isar.dart'` for `findAll()` method
+  - Optimized filter implementation using Isar queries instead of manual filtering
+  - Improved performance by filtering at database level with `.filter().tags()`
+  - Now properly excludes deleted/locked notes and sorts by date efficiently
 
 ### 📝 Documentation
 - Created `docs/specs.md` with comprehensive project guidelines

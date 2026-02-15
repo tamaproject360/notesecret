@@ -1,3 +1,4 @@
+import 'package:isar/isar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:notesecret/core/database/database_provider.dart';
 import 'package:notesecret/core/database/models/note.dart';
@@ -30,22 +31,12 @@ Future<List<Note>> filteredNotesByTag(FilteredNotesByTagRef ref) async {
 
   final isar = await ref.watch(isarDatabaseProvider.future);
   
-  // Query notes that have this tag
-  final notes = await isar.notes
-      .filter()
+  // Use Isar query filters for efficient database querying
+  // instead of filtering all notes in memory
+  return await isar.notes.filter()
+      .tags((q) => q.idEqualTo(selectedTag.id))
       .deletedAtIsNull()
       .isLockedEqualTo(false)
       .sortByUpdatedAtDesc()
       .findAll();
-  
-  // Filter by tag
-  final filteredNotes = <Note>[];
-  for (final note in notes) {
-    await note.tags.load();
-    if (note.tags.any((tag) => tag.id == selectedTag.id)) {
-      filteredNotes.add(note);
-    }
-  }
-  
-  return filteredNotes;
 }

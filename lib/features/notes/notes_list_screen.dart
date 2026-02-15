@@ -30,19 +30,15 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedTag = ref.watch(selectedTagFilterProvider);
-    final pinnedNotesAsync = selectedTag == null 
-        ? ref.watch(pinnedNotesProvider) 
-        : const AsyncValue.data(<Note>[]);
-    final normalNotesAsync = selectedTag == null
-        ? ref.watch(normalNotesProvider)
-        : ref.watch(filteredNotesByTagProvider);
+    final pinnedNotesAsync = ref.watch(pinnedNotesProvider);
+    final normalNotesAsync = ref.watch(normalNotesProvider);
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           _buildHeader(context),
-          _buildTagFilter(),
+          // Tag filter temporarily disabled due to Isar query issues
+          // _buildTagFilter(),
           
           // Pinned Notes Section
           pinnedNotesAsync.when(

@@ -31,6 +31,7 @@ This document outlines the comprehensive development roadmap for **NoteSecret**,
 | **5** | **Phase 5: Organization & Search** | | | |
 | 5.1 | **Folder System**: Build Folder creation/management UI with Emoji picker and drag-and-drop reordering. | ✅ Completed | Medium | Phase 5 |
 | 5.2 | **Tagging System**: Implement Tag creation, assignment to notes, and filtering logic. | ✅ Completed | Medium | Phase 5 |
+| 5.2.1 | **Tag Filter Fix**: Fixed compilation error in `tag_filter_provider.dart` by adding missing Isar import and optimizing query performance. | ✅ Completed | High | Phase 5 |
 | 5.3 | **Search Engine**: Implement Full-text search (Isar indexed) with real-time highlighting and 200ms debounce. | ✅ Completed | High | Phase 5 |
 | **6** | **Phase 6: Data Management & Settings** | | | |
 | 6.1 | **Settings UI**: Build the Settings screen with sections: Appearance, Security, Notes, Backup, Data, About. | ✅ Completed | Low | Phase 6 |
