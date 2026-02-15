@@ -14,9 +14,6 @@ subprojects {
 }
 
 subprojects {
-    project.evaluationDependsOn(":app")
-
-    // FIX: Assign namespace to libraries that don't have one (required for AGP 8+)
     afterEvaluate {
         val androidExtension = project.extensions.findByName("android")
         if (androidExtension != null) {
@@ -25,7 +22,13 @@ subprojects {
                 val getNamespace = androidExtension.javaClass.getMethod("getNamespace")
                 val setNamespace = androidExtension.javaClass.getMethod("setNamespace", String::class.java)
                 
-                if (getNamespace.invoke(androidExtension) == null) {
+                val currentNamespace = getNamespace.invoke(androidExtension) as String?
+                
+                // For isar_flutter_libs, use its original package name
+                if (project.name == "isar_flutter_libs" && currentNamespace == null) {
+                    setNamespace.invoke(androidExtension, "dev.isar.isar_flutter_libs")
+                    println("Auto-assigned namespace for ${project.name}: dev.isar.isar_flutter_libs")
+                } else if (currentNamespace == null) {
                     val packageName = "com.tamadev.notesecret.${project.name.replace("-", "_")}"
                     setNamespace.invoke(androidExtension, packageName)
                     println("Auto-assigned namespace: $packageName")

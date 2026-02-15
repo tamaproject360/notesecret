@@ -31,11 +31,12 @@ class AppTheme {
         labelMedium: AppTypography.labelMedium.copyWith(color: AppColors.deepCharcoal),
         labelSmall: AppTypography.labelSmall.copyWith(color: AppColors.deepCharcoal),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.softCream,
         elevation: 2,
-        shadowColor: Color.fromRGBO(0, 0, 0, 0.06),
+        shadowColor: const Color.fromRGBO(0, 0, 0, 0.06),
         margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.parchmentWhite,
@@ -81,11 +82,12 @@ class AppTheme {
         labelMedium: AppTypography.labelMedium.copyWith(color: AppColors.darkTextCream),
         labelSmall: AppTypography.labelSmall.copyWith(color: AppColors.darkTextCream),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.darkWarm,
         elevation: 2,
-        shadowColor: Color.fromRGBO(0, 0, 0, 0.3),
+        shadowColor: const Color.fromRGBO(0, 0, 0, 0.3),
         margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.warmBlack,

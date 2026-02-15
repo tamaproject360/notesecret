@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:notesecret/features/notes/notes_list_screen.dart';
 import 'package:notesecret/features/notes/note_editor_screen.dart';
+import 'package:notesecret/features/notes/search_screen.dart';
 import 'package:notesecret/features/settings/settings_screen.dart';
 import 'package:notesecret/features/vault/vault_screen.dart';
 import 'package:notesecret/features/folders/folders_screen.dart';
@@ -32,6 +33,11 @@ final goRouter = GoRouter(
         final id = idStr == 'new' ? null : int.tryParse(idStr ?? '');
         return NoteEditorScreen(noteId: id);
       },
+    ),
+    GoRoute(
+      path: '/search',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const SearchScreen(),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,

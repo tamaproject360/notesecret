@@ -63,6 +63,20 @@ final normalNotesProvider = AutoDisposeStreamProvider<List<Note>>.internal(
 );
 
 typedef NormalNotesRef = AutoDisposeStreamProviderRef<List<Note>>;
+String _$lockedNotesHash() => r'ee05ba2a7def6ae7598cb0af5e608d384162e356';
+
+/// See also [lockedNotes].
+@ProviderFor(lockedNotes)
+final lockedNotesProvider = AutoDisposeStreamProvider<List<Note>>.internal(
+  lockedNotes,
+  name: r'lockedNotesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$lockedNotesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef LockedNotesRef = AutoDisposeStreamProviderRef<List<Note>>;
 String _$noteHash() => r'986748b0b77022644dafba9020d3f48950ebe10c';
 
 /// Copied from Dart SDK
