@@ -296,8 +296,7 @@ class _FoldersScreenState extends ConsumerState<FoldersScreen> {
                             onPressed: () => _showDeleteDialog(folder),
                           ),
                           onTap: () {
-                            // Navigate to folder notes view
-                            // TODO: Implement folder notes filtering
+                            context.push('/folder/${folder.id}');
                           },
                         ),
                       );

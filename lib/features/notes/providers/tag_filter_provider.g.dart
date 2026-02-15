@@ -7,7 +7,7 @@ part of 'tag_filter_provider.dart';
 // **************************************************************************
 
 String _$filteredNotesByTagHash() =>
-    r'666916cbdee61680ca5c037934e76745dae1128f';
+    r'2b9d82e6ef1bc1d6ce511e93d143dd83d97d8e40';
 
 /// See also [filteredNotesByTag].
 @ProviderFor(filteredNotesByTag)

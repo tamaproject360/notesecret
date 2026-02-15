@@ -18,13 +18,14 @@ The project is built using **Flutter 3.x** and **Dart**, focusing on performance
 | **Routing** | GoRouter | `go_router` |
 | **Local Database** | Isar (NoSQL) | `isar`, `isar_flutter_libs` |
 | **Security (Storage)** | Secure Storage | `flutter_secure_storage` |
-| **Security (Auth)** | Biometrics | `local_auth` |
+| **Security (Auth)** | Biometrics & PIN (Active Verification) | `local_auth` |
 | **Encryption** | AES-256 | `encrypt` |
 | **UI/Icons** | Lucide & SVG | `lucide_icons`, `flutter_svg`, `google_fonts` |
 | **Utilities** | Formatting/Utils | `intl`, `uuid`, `path_provider`, `share_plus` |
 | **Rendering** | Markdown | `flutter_markdown` |
 | **Notifications** | Local Notifications | `flutter_local_notifications` |
 | **Code Gen** | Build Runner | `build_runner`, `freezed`, `json_serializable` |
+| **App Assets** | Launcher Icons & Splash | `flutter_launcher_icons`, `flutter_native_splash` |
 
 ## Folder & File Project Structure
 The project follows a **Feature-First Architecture** combined with a Clean Architecture approach within features.
@@ -42,8 +43,8 @@ lib/
 │   └── notifications/          # Local notification service
 ├── features/                   # Functional modules (Screens + Logic)
 │   ├── notes/                  # Note listing, editing, searching
-│   ├── vault/                  # Locked notes logic
-│   ├── folders/                # Folder & Tag management
+│   ├── vault/                  # Locked notes logic & PIN Verification
+│   ├── folders/                # Folder listing, creation, & detail view
 │   ├── settings/               # App preferences & config
 │   ├── backup/                 # Export/Import logic
 │   ├── onboarding/             # Intro screens

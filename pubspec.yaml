@@ -75,6 +75,8 @@ dev_dependencies:
   isar_generator: ^3.1.0+1
   freezed: ^2.4.7
   json_serializable: ^6.7.1
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.10
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -118,3 +120,21 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# Flutter Launcher Icons Configuration
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icons/icon.png"
+  adaptive_icon_background: "#604737"
+  adaptive_icon_foreground: "assets/icons/icon.png"
+
+# Flutter Native Splash Configuration
+flutter_native_splash:
+  color: "#604737"
+  image: "assets/splash/splash_logo.png"
+  android: true
+  ios: false
+  android_12:
+    color: "#604737"
+    image: "assets/splash/splash_logo.png"

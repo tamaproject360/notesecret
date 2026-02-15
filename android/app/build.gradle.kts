@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.tamadev.notesecret.notesecret"
-    compileSdk = 34  // Fixed: Set to 34 for compatibility
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

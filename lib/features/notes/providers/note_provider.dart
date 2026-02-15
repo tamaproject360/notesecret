@@ -40,3 +40,9 @@ Future<Note?> note(NoteRef ref, int id) async {
   final repository = await ref.watch(noteRepositoryProvider.future);
   return repository.getNote(id);
 }
+
+@riverpod
+Stream<List<Note>> notesInFolder(NotesInFolderRef ref, int folderId) async* {
+  final repository = await ref.watch(noteRepositoryProvider.future);
+  yield* repository.watchNotesInFolder(folderId);
+}

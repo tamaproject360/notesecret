@@ -66,29 +66,63 @@ class _VaultScreenState extends ConsumerState<VaultScreen> {
   }
 
   void _showUnlockDialog() {
-    // Placeholder for PIN dialog
+    final pinController = TextEditingController();
+    bool isError = false;
+
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Unlock Vault'),
-        content: const Text('Please enter your PIN (Simulated)'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              context.go('/'); // Go back home if cancelled
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              setState(() => _isAuthenticated = true);
-            },
-            child: const Text('Unlock'),
-          ),
-        ],
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: const Text('Unlock Vault'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Please enter your PIN'),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: pinController,
+                  obscureText: true,
+                  keyboardType: TextInputType.number,
+                  maxLength: 6,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: 'PIN',
+                    errorText: isError ? 'Incorrect PIN' : null,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.go('/home'); // Go back home if cancelled
+                },
+                child: const Text('Cancel'),
+              ),
+              FilledButton(
+                onPressed: () async {
+                  final authService = ref.read(authServiceProvider);
+                  final isValid = await authService.verifyPin(pinController.text);
+                  
+                  if (isValid) {
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                      this.setState(() => _isAuthenticated = true);
+                    }
+                  } else {
+                    setState(() => isError = true);
+                  }
+                },
+                style: FilledButton.styleFrom(backgroundColor: AppColors.sageGreen),
+                child: const Text('Unlock'),
+              ),
+            ],
+          );
+        }
       ),
     );
   }

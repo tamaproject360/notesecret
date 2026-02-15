@@ -465,12 +465,12 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - ✅ **Rich Note Editor**: Distraction-free writing with auto-save (2s debounce)
 - ✅ **Markdown Support**: Write and preview markdown-formatted notes
 - ✅ **Full-Text Search**: Real-time search across all notes (200ms debounce)
-- ✅ **Organization**: Folders and tags for structured note management
+- ✅ **Organization**: Folders (with Detail View) and tags for structured note management
 - ✅ **Pin Important Notes**: Keep critical notes at the top
 - ✅ **Color Coding**: Visual categorization with customizable note colors
 
 ### Security & Privacy
-- ✅ **Vault Feature**: Lock sensitive notes behind biometric/PIN authentication
+- ✅ **Vault Feature**: Lock sensitive notes behind Biometric or Active PIN verification
 - ✅ **Auto-Lock**: Automatic vault locking after 30s of inactivity
 - ✅ **Encrypted Backups**: AES-256 password-protected `.notesecret` files
 - ✅ **Secure Storage**: PIN and sensitive data stored using flutter_secure_storage

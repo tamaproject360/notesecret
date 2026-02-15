@@ -13,6 +13,9 @@ class NoteRepository {
         note.createdAt = DateTime.now();
       }
       await _isar.notes.put(note);
+      
+      // FIX: Save tags relationships manually as Isar doesn't do it automatically on put
+      await note.tags.save();
     });
   }
 
@@ -138,5 +141,14 @@ class NoteRepository {
           .sortByUpdatedAtDesc()
           .findAll();
     }
+  }
+
+  Stream<List<Note>> watchNotesInFolder(int folderId) {
+    return _isar.notes
+        .filter()
+        .deletedAtIsNull()
+        .folderIdEqualTo(folderId)
+        .sortByUpdatedAtDesc()
+        .watch(fireImmediately: true);
   }
 }

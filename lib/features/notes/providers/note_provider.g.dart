@@ -222,5 +222,133 @@ class _NoteProviderElement extends AutoDisposeFutureProviderElement<Note?>
   @override
   int get id => (origin as NoteProvider).id;
 }
+
+String _$notesInFolderHash() => r'467f1ad6eedb8cb8b2eb45852b298e8449d8fa7e';
+
+/// See also [notesInFolder].
+@ProviderFor(notesInFolder)
+const notesInFolderProvider = NotesInFolderFamily();
+
+/// See also [notesInFolder].
+class NotesInFolderFamily extends Family<AsyncValue<List<Note>>> {
+  /// See also [notesInFolder].
+  const NotesInFolderFamily();
+
+  /// See also [notesInFolder].
+  NotesInFolderProvider call(
+    int folderId,
+  ) {
+    return NotesInFolderProvider(
+      folderId,
+    );
+  }
+
+  @override
+  NotesInFolderProvider getProviderOverride(
+    covariant NotesInFolderProvider provider,
+  ) {
+    return call(
+      provider.folderId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'notesInFolderProvider';
+}
+
+/// See also [notesInFolder].
+class NotesInFolderProvider extends AutoDisposeStreamProvider<List<Note>> {
+  /// See also [notesInFolder].
+  NotesInFolderProvider(
+    int folderId,
+  ) : this._internal(
+          (ref) => notesInFolder(
+            ref as NotesInFolderRef,
+            folderId,
+          ),
+          from: notesInFolderProvider,
+          name: r'notesInFolderProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$notesInFolderHash,
+          dependencies: NotesInFolderFamily._dependencies,
+          allTransitiveDependencies:
+              NotesInFolderFamily._allTransitiveDependencies,
+          folderId: folderId,
+        );
+
+  NotesInFolderProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.folderId,
+  }) : super.internal();
+
+  final int folderId;
+
+  @override
+  Override overrideWith(
+    Stream<List<Note>> Function(NotesInFolderRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: NotesInFolderProvider._internal(
+        (ref) => create(ref as NotesInFolderRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        folderId: folderId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeStreamProviderElement<List<Note>> createElement() {
+    return _NotesInFolderProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is NotesInFolderProvider && other.folderId == folderId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, folderId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin NotesInFolderRef on AutoDisposeStreamProviderRef<List<Note>> {
+  /// The parameter `folderId` of this provider.
+  int get folderId;
+}
+
+class _NotesInFolderProviderElement
+    extends AutoDisposeStreamProviderElement<List<Note>> with NotesInFolderRef {
+  _NotesInFolderProviderElement(super.provider);
+
+  @override
+  int get folderId => (origin as NotesInFolderProvider).folderId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

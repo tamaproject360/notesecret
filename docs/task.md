@@ -40,7 +40,8 @@ This document outlines the comprehensive development roadmap for **NoteSecret**,
 | 4.2 | **Vault Feature**: Create the "Vault" screen (accessible only via auth), handling locking/unlocking logic for individual notes. | ✅ Completed | High | Phase 4 |
 | 4.3 | **Auto-Lock**: Implement app lifecycle listening to auto-lock Vault on background/inactive state (30s timeout). | ✅ Completed | High | Phase 4 |
 | **5** | **Phase 5: Organization & Search** | ✅ **100%** | | |
-| 5.1 | **Folder System**: Build Folder creation/management UI with Emoji picker and drag-and-drop reordering. | ✅ Completed | Medium | Phase 5 |
+| 5.1 | **Folder System**: Build Folder creation/management UI with Emoji picker and drag-and-drop reordering. | ✅ Completed | High | Phase 5 |
+| 5.1.1 | **Folder Logic Fixes**: Implemented "Add to Folder" from detail view and fixed editor folder selection persistence. | ✅ Completed | High | Phase 5 |
 | 5.2 | **Tagging System**: Implement Tag creation, assignment to notes, and filtering logic. | ✅ Completed | Medium | Phase 5 |
 | 5.2.1 | **Tag Filter Fix**: Fixed compilation error in `tag_filter_provider.dart` by adding missing Isar import and optimizing query performance. | ✅ Completed | High | Phase 5 |
 | 5.3 | **Search Engine**: Implement Full-text search (Isar indexed) with real-time highlighting and 200ms debounce. | ✅ Completed | High | Phase 5 |

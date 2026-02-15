@@ -265,83 +265,98 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   }
 
   Future<void> _selectFolder() async {
-    final foldersAsync = ref.read(allFoldersProvider);
-    
-    await foldersAsync.when(
-      data: (folders) async {
-        if (!mounted) return;
-        
-        await showModalBottomSheet(
-          context: context,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    try {
+      // Force refresh to ensure latest data
+      ref.invalidate(allFoldersProvider);
+      
+      // Wait for data to be ready
+      final folders = await ref.read(allFoldersProvider.future);
+      
+      if (!mounted) return;
+
+      if (folders.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(
+            content: const Text('No folders created yet. Go to Folders tab to create one.'),
+            backgroundColor: AppColors.warmGray,
+            duration: const Duration(seconds: 2),
           ),
-          builder: (context) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Select Folder', style: AppTypography.headingMedium),
-                  const SizedBox(height: 16),
-                  if (_selectedFolderId != null)
-                    ListTile(
-                      leading: const Icon(LucideIcons.folderX, color: AppColors.terracotta),
-                      title: const Text('Remove from folder'),
-                      onTap: () {
-                        setState(() {
-                          _selectedFolderId = null;
-                          _selectedFolderName = null;
-                          _isDirty = true;
-                        });
-                        Navigator.pop(context);
-                        _saveNote();
-                      },
-                    ),
-                  const Divider(),
-                  Flexible(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: folders.length,
-                      itemBuilder: (context, index) {
-                        final folder = folders[index];
-                        final isSelected = _selectedFolderId == folder.id;
-                        return ListTile(
-                          leading: Text(
-                            folder.emoji ?? '📁',
-                            style: const TextStyle(fontSize: 24),
-                          ),
-                          title: Text(folder.name),
-                          trailing: isSelected 
-                              ? const Icon(LucideIcons.check, color: AppColors.sageGreen)
-                              : null,
-                          selected: isSelected,
-                          onTap: () {
-                            setState(() {
-                              _selectedFolderId = folder.id;
-                              _selectedFolderName = folder.name;
-                              _isDirty = true;
-                            });
-                            Navigator.pop(context);
-                            _saveNote();
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
         );
-      },
-      loading: () {},
-      error: (e, st) {
-        if (mounted) AppToast.show(context, 'Failed to load folders');
-      },
-    );
+        return;
+      }
+        
+      await showModalBottomSheet(
+        context: context,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) {
+          return Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Select Folder', style: AppTypography.headingMedium),
+                const SizedBox(height: 16),
+                if (_selectedFolderId != null)
+                  ListTile(
+                    leading: const Icon(LucideIcons.folderX, color: AppColors.terracotta),
+                    title: const Text('Remove from folder'),
+                    onTap: () {
+                      setState(() {
+                        _selectedFolderId = null;
+                        _selectedFolderName = null;
+                        _isDirty = true;
+                      });
+                      Navigator.pop(context);
+                      _saveNote();
+                    },
+                  ),
+                const Divider(),
+                Flexible(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: folders.length,
+                    itemBuilder: (context, index) {
+                      final folder = folders[index];
+                      final isSelected = _selectedFolderId == folder.id;
+                      return ListTile(
+                        leading: Text(
+                          folder.emoji ?? '📁',
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        title: Text(folder.name),
+                        trailing: isSelected 
+                            ? const Icon(LucideIcons.check, color: AppColors.sageGreen)
+                            : null,
+                        selected: isSelected,
+                        onTap: () {
+                          setState(() {
+                            _selectedFolderId = folder.id;
+                            _selectedFolderName = folder.name;
+                            _isDirty = true;
+                          });
+                          Navigator.pop(context);
+                          _saveNote();
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      if (mounted) {
+         ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to load folders')),
+        );
+      }
+    }
   }
 
   Future<void> _selectColor() async {
@@ -689,6 +704,40 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                       ),
                     ),
                     
+                    // Folder Display (New)
+                    if (_selectedFolderName != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                        child: InkWell(
+                          onTap: _selectFolder,
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: AppColors.sageGreen.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: AppColors.sageGreen.withOpacity(0.3)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(LucideIcons.folder, size: 14, color: AppColors.sageGreen),
+                                const SizedBox(width: 8),
+                                Text(
+                                  _selectedFolderName!,
+                                  style: AppTypography.labelSmall.copyWith(
+                                    color: AppColors.sageGreen,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                const Icon(LucideIcons.chevronDown, size: 12, color: AppColors.sageGreen),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
                     // Tags Display
                     if (_selectedTags.isNotEmpty)
                       Padding(

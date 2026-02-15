@@ -18,6 +18,14 @@ subprojects {
         val androidExtension = project.extensions.findByName("android")
         if (androidExtension != null) {
             try {
+                // Force compileSdkVersion to 36 for all modules to fix "lStar not found" and dependency errors
+                val setCompileSdkVersion = androidExtension.javaClass.getMethod("setCompileSdkVersion", Int::class.javaPrimitiveType)
+                setCompileSdkVersion.invoke(androidExtension, 36)
+            } catch (e: Exception) {
+                // Ignore if method not found
+            }
+
+            try {
                 // Access 'android' extension dynamically to avoid classpath issues
                 val getNamespace = androidExtension.javaClass.getMethod("getNamespace")
                 val setNamespace = androidExtension.javaClass.getMethod("setNamespace", String::class.java)

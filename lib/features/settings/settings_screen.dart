@@ -171,8 +171,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     // Pick backup file
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['notesecret'],
+      type: FileType.any,
     );
 
     if (result == null || result.files.isEmpty) return;
