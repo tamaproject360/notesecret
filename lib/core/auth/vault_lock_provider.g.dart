@@ -6,7 +6,7 @@ part of 'vault_lock_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$vaultLockStateHash() => r'9e4c434b907b0511778462efc52a00a8dc68bd86';
+String _$vaultLockStateHash() => r'57a8e8ba77de9d05fa401566e861e219ed26c50f';
 
 /// See also [VaultLockState].
 @ProviderFor(VaultLockState)

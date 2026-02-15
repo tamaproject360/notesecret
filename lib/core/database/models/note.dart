@@ -29,6 +29,8 @@ class Note {
   late DateTime updatedAt;
 
   DateTime? deletedAt; // For soft delete
+
+  DateTime? reminderAt; // For notifications
 }
 
 @collection

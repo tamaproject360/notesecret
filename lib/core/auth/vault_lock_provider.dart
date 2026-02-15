@@ -11,6 +11,9 @@ class VaultLockState extends _$VaultLockState {
   
   @override
   bool build() {
+    ref.onDispose(() {
+      _cancelTimer();
+    });
     // Start as locked
     return false;
   }
@@ -42,12 +45,6 @@ class VaultLockState extends _$VaultLockState {
     if (state) {
       _startAutoLockTimer();
     }
-  }
-
-  @override
-  void dispose() {
-    _cancelTimer();
-    super.dispose();
   }
 }
 

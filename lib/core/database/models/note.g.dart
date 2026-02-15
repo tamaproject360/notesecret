@@ -57,13 +57,18 @@ const NoteSchema = CollectionSchema(
       name: r'isPinned',
       type: IsarType.bool,
     ),
-    r'title': PropertySchema(
+    r'reminderAt': PropertySchema(
       id: 8,
+      name: r'reminderAt',
+      type: IsarType.dateTime,
+    ),
+    r'title': PropertySchema(
+      id: 9,
       name: r'title',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'updatedAt',
       type: IsarType.dateTime,
     )
@@ -154,8 +159,9 @@ void _noteSerialize(
   writer.writeLong(offsets[5], object.folderId);
   writer.writeBool(offsets[6], object.isLocked);
   writer.writeBool(offsets[7], object.isPinned);
-  writer.writeString(offsets[8], object.title);
-  writer.writeDateTime(offsets[9], object.updatedAt);
+  writer.writeDateTime(offsets[8], object.reminderAt);
+  writer.writeString(offsets[9], object.title);
+  writer.writeDateTime(offsets[10], object.updatedAt);
 }
 
 Note _noteDeserialize(
@@ -174,8 +180,9 @@ Note _noteDeserialize(
   object.id = id;
   object.isLocked = reader.readBool(offsets[6]);
   object.isPinned = reader.readBool(offsets[7]);
-  object.title = reader.readString(offsets[8]);
-  object.updatedAt = reader.readDateTime(offsets[9]);
+  object.reminderAt = reader.readDateTimeOrNull(offsets[8]);
+  object.title = reader.readString(offsets[9]);
+  object.updatedAt = reader.readDateTime(offsets[10]);
   return object;
 }
 
@@ -203,8 +210,10 @@ P _noteDeserializeProp<P>(
     case 7:
       return (reader.readBool(offset)) as P;
     case 8:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 9:
+      return (reader.readString(offset)) as P;
+    case 10:
       return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1331,6 +1340,75 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Note, Note, QAfterFilterCondition> reminderAtIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'reminderAt',
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> reminderAtIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'reminderAt',
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> reminderAtEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'reminderAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> reminderAtGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'reminderAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> reminderAtLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'reminderAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> reminderAtBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'reminderAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Note, Note, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1657,6 +1735,18 @@ extension NoteQuerySortBy on QueryBuilder<Note, Note, QSortBy> {
     });
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> sortByReminderAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'reminderAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByReminderAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'reminderAt', Sort.desc);
+    });
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> sortByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
@@ -1779,6 +1869,18 @@ extension NoteQuerySortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> thenByReminderAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'reminderAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByReminderAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'reminderAt', Sort.desc);
+    });
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> thenByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
@@ -1855,6 +1957,12 @@ extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
     });
   }
 
+  QueryBuilder<Note, Note, QDistinct> distinctByReminderAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'reminderAt');
+    });
+  }
+
   QueryBuilder<Note, Note, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1921,6 +2029,12 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
   QueryBuilder<Note, bool, QQueryOperations> isPinnedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isPinned');
+    });
+  }
+
+  QueryBuilder<Note, DateTime?, QQueryOperations> reminderAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'reminderAt');
     });
   }
 
