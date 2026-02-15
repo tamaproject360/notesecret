@@ -105,16 +105,37 @@
 
 ## 📥 Download
 
-### Android
-- **APK**: [Download app-release.apk](build/app/outputs/flutter-apk/app-release.apk)
-- **Min SDK**: 21 (Android 5.0 Lollipop)
-- **Target SDK**: 34 (Android 14)
+### Latest Release
+
+📦 **[Download from GitHub Releases](https://github.com/yourusername/notesecret/releases/latest)**
+
+### Android APK
+- **Download**: [notesecret-v1.0.0-android.apk](https://github.com/yourusername/notesecret/releases/latest)
+- **Min SDK**: Android 5.0 (API 21) and above
+- **Target SDK**: Android 14 (API 34)
+- **Architecture**: Universal (arm64-v8a, armeabi-v7a, x86_64)
 - **Size**: ~30-40 MB
 
+**Installation Steps:**
+1. Download the APK file from [GitHub Releases](https://github.com/yourusername/notesecret/releases)
+2. Enable "Install from Unknown Sources" in Android Settings
+3. Open the downloaded APK file
+4. Follow the installation prompts
+5. Launch NoteSecret and start taking notes!
+
 ### Windows Desktop
-- **Executable**: [Download notesecret.exe](build/windows/runner/Release/notesecret.exe)
+- **Download**: [notesecret-v1.0.0-windows-x64.zip](https://github.com/yourusername/notesecret/releases/latest)
 - **Platform**: Windows 10/11 (x64)
-- **Size**: ~25-35 MB
+- **Size**: ~25-35 MB (compressed)
+
+**Installation Steps:**
+1. Download the ZIP file from [GitHub Releases](https://github.com/yourusername/notesecret/releases)
+2. Extract the ZIP file to your preferred location
+3. Run `notesecret.exe`
+4. (Optional) Create a desktop shortcut for quick access
+
+### Build from Source
+See [Installation](#installation) section below for instructions on building from source.
 
 ---
 
