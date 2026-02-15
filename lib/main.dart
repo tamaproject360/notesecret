@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notesecret/app/router.dart';
 import 'package:notesecret/app/theme/app_theme.dart';
+import 'package:notesecret/app/theme/theme_provider.dart';
 import 'package:notesecret/core/notifications/notification_service.dart';
 
 void main() async {
@@ -25,13 +26,30 @@ class NoteSecretApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-      title: 'NoteSecret',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      routerConfig: goRouter,
+    final themeModeAsync = ref.watch(themeModeNotifierProvider);
+    
+    return themeModeAsync.when(
+      data: (themeMode) => MaterialApp.router(
+        title: 'NoteSecret',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeMode,
+        routerConfig: goRouter,
+      ),
+      loading: () => const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      ),
+      error: (_, __) => MaterialApp.router(
+        title: 'NoteSecret',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.system,
+        routerConfig: goRouter,
+      ),
     );
   }
 }

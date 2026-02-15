@@ -4,7 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:notesecret/app/theme/color_scheme.dart';
 import 'package:notesecret/app/theme/typography.dart';
+import 'package:notesecret/core/database/models/note.dart';
+import 'package:notesecret/core/database/repositories/tag_repository.dart';
 import 'package:notesecret/features/notes/providers/note_provider.dart';
+import 'package:notesecret/features/notes/providers/tag_filter_provider.dart';
 import 'package:notesecret/shared/widgets/note_card.dart';
 import 'package:notesecret/shared/widgets/skeleton.dart';
 
@@ -27,13 +30,19 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pinnedNotesAsync = ref.watch(pinnedNotesProvider);
-    final normalNotesAsync = ref.watch(normalNotesProvider);
+    final selectedTag = ref.watch(selectedTagFilterProvider);
+    final pinnedNotesAsync = selectedTag == null 
+        ? ref.watch(pinnedNotesProvider) 
+        : const AsyncValue.data(<Note>[]);
+    final normalNotesAsync = selectedTag == null
+        ? ref.watch(normalNotesProvider)
+        : ref.watch(filteredNotesByTagProvider);
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           _buildHeader(context),
+          _buildTagFilter(),
           
           // Pinned Notes Section
           pinnedNotesAsync.when(
@@ -150,9 +159,7 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
       actions: [
         IconButton(
           icon: const Icon(LucideIcons.search),
-          onPressed: () {
-            // TODO: Open search view
-          },
+          onPressed: () => context.push('/search'),
         ),
         IconButton(
           icon: Icon(_isGridView ? LucideIcons.list : LucideIcons.layoutGrid),
@@ -166,6 +173,88 @@ class _NotesListScreenState extends ConsumerState<NotesListScreen> {
           height: 0.5,
           color: AppColors.warmGray.withOpacity(0.2),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTagFilter() {
+    final tagsAsync = ref.watch(tagRepositoryProvider).getAllTags();
+    final selectedTag = ref.watch(selectedTagFilterProvider);
+
+    return SliverToBoxAdapter(
+      child: FutureBuilder<List<Tag>>(
+        future: tagsAsync,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
+          final tags = snapshot.data!;
+
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Filter by Tag',
+                  style: AppTypography.labelSmall.copyWith(
+                    color: AppColors.warmGray,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 36,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      // All notes chip
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: FilterChip(
+                          label: const Text('All Notes'),
+                          selected: selectedTag == null,
+                          onSelected: (_) {
+                            ref.read(selectedTagFilterProvider.notifier).clear();
+                          },
+                          backgroundColor: AppColors.warmGray.withOpacity(0.1),
+                          selectedColor: AppColors.sageGreen.withOpacity(0.3),
+                          checkmarkColor: AppColors.sageGreen,
+                          labelStyle: TextStyle(
+                            color: selectedTag == null ? AppColors.sageGreen : AppColors.deepCharcoal,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      // Tag chips
+                      ...tags.map((tag) {
+                        final isSelected = selectedTag?.id == tag.id;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: FilterChip(
+                            label: Text(tag.name),
+                            selected: isSelected,
+                            onSelected: (_) {
+                              ref.read(selectedTagFilterProvider.notifier).setTag(tag);
+                            },
+                            backgroundColor: AppColors.sageGreen.withOpacity(0.1),
+                            selectedColor: AppColors.sageGreen.withOpacity(0.3),
+                            checkmarkColor: AppColors.sageGreen,
+                            labelStyle: TextStyle(
+                              color: isSelected ? AppColors.sageGreen : AppColors.deepCharcoal,
+                              fontSize: 12,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:notesecret/app/theme/color_scheme.dart';
 import 'package:notesecret/app/theme/typography.dart';
+import 'package:notesecret/app/theme/theme_provider.dart';
 import 'package:notesecret/core/auth/auth_service.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -125,6 +126,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           SliverToBoxAdapter(
             child: Column(
               children: [
+                _buildSectionHeader('Appearance'),
+                _buildThemeSelector(),
+                
                 _buildSectionHeader('Security'),
                 _buildListTile(
                   icon: LucideIcons.lock,
@@ -247,6 +251,98 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         value: value,
         onChanged: onChanged,
         activeColor: AppColors.sageGreen,
+      ),
+    );
+  }
+
+  Widget _buildThemeSelector() {
+    final themeModeAsync = ref.watch(themeModeNotifierProvider);
+    
+    return themeModeAsync.when(
+      data: (currentMode) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            children: [
+              Expanded(
+                child: _buildThemeOption(
+                  icon: LucideIcons.sun,
+                  label: 'Light',
+                  isSelected: currentMode == ThemeMode.light,
+                  onTap: () async {
+                    await ref.read(themeModeNotifierProvider.notifier).setThemeMode(ThemeMode.light);
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildThemeOption(
+                  icon: LucideIcons.moon,
+                  label: 'Dark',
+                  isSelected: currentMode == ThemeMode.dark,
+                  onTap: () async {
+                    await ref.read(themeModeNotifierProvider.notifier).setThemeMode(ThemeMode.dark);
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildThemeOption(
+                  icon: LucideIcons.monitor,
+                  label: 'System',
+                  isSelected: currentMode == ThemeMode.system,
+                  onTap: () async {
+                    await ref.read(themeModeNotifierProvider.notifier).setThemeMode(ThemeMode.system);
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+
+  Widget _buildThemeOption({
+    required IconData icon,
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        decoration: BoxDecoration(
+          color: isSelected 
+              ? AppColors.sageGreen.withOpacity(0.2)
+              : AppColors.warmGray.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? AppColors.sageGreen : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? AppColors.sageGreen : AppColors.warmGray,
+              size: 28,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: AppTypography.labelSmall.copyWith(
+                color: isSelected ? AppColors.sageGreen : AppColors.warmGray,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
